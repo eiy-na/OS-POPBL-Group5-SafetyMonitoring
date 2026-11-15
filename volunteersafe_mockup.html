@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VolunteerSafe | Volunteer & Emergency Monitoring</title>
+<style>
+:root{--navy:#14243a;--blue:#2563eb;--bg:#f3f6fb;--text:#182230;--muted:#68778b;--line:#e3e9f1;--green:#16845b;--amber:#b7791f;--red:#c93636}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--navy);color:#fff;padding:17px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-size:20px;font-weight:800;letter-spacing:.2px}.brand span{color:#7dd3fc}.tag{font-size:12px;color:#c6d2e1}
+main{max-width:1120px;margin:30px auto;padding:0 20px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 28px #1b35500b}
+.login-wrap{max-width:560px;margin:42px auto}.login-head{padding:28px 30px 8px}.login-head h1{margin:0 0 8px;font-size:26px}.login-head p{margin:0;color:var(--muted);line-height:1.5}
+form{padding:22px 30px 30px}.field{margin-bottom:17px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid #cfd8e5;border-radius:9px;font:inherit;background:#fff;color:var(--text)}
+textarea{min-height:90px;resize:vertical}input:focus,select:focus,textarea:focus{outline:3px solid #bfdbfe;border-color:var(--blue)}
+button{border:0;border-radius:9px;padding:12px 17px;font:inherit;font-weight:700;cursor:pointer}
+.primary{background:var(--blue);color:#fff}.primary:hover{background:#1d4ed8}.secondary{background:#eaf0f8;color:var(--navy)}.danger{background:var(--red);color:#fff}
+.full{width:100%}.hint{font-size:12px;color:var(--muted);margin-top:8px}
+.hidden{display:none!important}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:22px}
+.topline h1{margin:0;font-size:25px}.sub{color:var(--muted);font-size:14px;margin-top:5px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}
+.stat{padding:18px}.stat .label{font-size:12px;color:var(--muted);font-weight:700}.stat .num{font-size:27px;font-weight:800;margin-top:7px}
+.content-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}.section{padding:21px}.section h2{font-size:17px;margin:0 0 16px}
+.status{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:800}
+.ok{background:#e4f6ed;color:#14734f}.warn{background:#fff4d9;color:#94620c}.critical{background:#ffe5e5;color:#a52323}
+.report{border:1px solid var(--line);border-radius:11px;padding:13px;margin-bottom:10px}
+.report-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.report p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+.notice{padding:12px 14px;border-radius:10px;background:#fff4d9;color:#80540b;font-size:13px;line-height:1.45;margin-bottom:16px}
+.alert{padding:13px;border-radius:10px;background:#fff0f0;border:1px solid #ffd0d0;color:#982828;font-size:13px;line-height:1.5;margin-top:12px}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.small{font-size:12px;color:var(--muted)}
+footer{text-align:center;color:#8a96a6;font-size:12px;padding:30px 15px}
+@media(max-width:760px){.grid{grid-template-columns:1fr 1fr}.content-grid{grid-template-columns:1fr}.login-head,form{padding-left:20px;padding-right:20px}}
+@media(max-width:460px){.grid{grid-template-columns:1fr}.topline h1{font-size:21px}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="brand">Volunteer<span>Safe</span></div><div class="tag">Volunteer Workstation & Emergency Monitoring</div></div>
+  <div class="tag">PROTOTYPE • DEMO VERSION</div>
+</header>
+
+<main>
+<section id="loginView" class="login-wrap panel">
+  <div class="login-head">
+    <h1>Volunteer Login</h1>
+    <p>Sign in to view your assigned workstation and report the condition of your section.</p>
+  </div>
+  <form id="loginForm">
+    <div class="field"><label for="volName">Volunteer name</label><input id="volName" required placeholder="Enter your full name"></div>
+    <div class="field"><label for="matrix">Matrix number / ID</label><input id="matrix" required placeholder="e.g. CN250221"></div>
+    <div class="field"><label for="workstation">Workstation</label>
+      <select id="workstation" required><option value="">Select workstation</option><option>Workstation 1</option><option>Workstation 2</option><option>Workstation 3</option><option>Workstation 4</option><option>Mobile / Roaming Team</option></select>
+    </div>
+    <div class="field"><label for="position">Assigned position / section</label>
+      <select id="position" required><option value="">Select your section</option><option>Registration</option><option>First Aid</option><option> Crowd Control</option><option>Activity Area</option><option>Logistics</option><option>Security</option><option>Other</option></select>
+    </div>
+    <button class="primary full" type="submit">Login to Dashboard</button>
+    <div class="hint">Demo only: details are kept in this browser session and are not sent to a server.</div>
+  </form>
+</section>
+
+<section id="dashboardView" class="hidden">
+  <div class="topline">
+    <div><h1>Volunteer Dashboard</h1><div class="sub" id="welcomeText">Welcome back</div></div>
+    <button class="secondary" id="logoutBtn">Log out</button>
+  </div>
+  <div class="notice"><strong>Important:</strong> This is a front-end prototype. Reports and alerts are visible only in this browser. It does not contact emergency services or notify other users.</div>
+  <div class="grid">
+    <div class="panel stat"><div class="label">YOUR WORKSTATION</div><div class="num" style="font-size:20px" id="workstationValue">—</div></div>
+    <div class="panel stat"><div class="label">YOUR SECTION</div><div class="num" style="font-size:20px" id="positionValue">—</div></div>
+    <div class="panel stat"><div class="label">SECTION CONDITION</div><div class="num" style="font-size:20px" id="conditionValue">Normal</div></div>
+  </div>
+  <div class="content-grid">
+    <div class="panel section">
+      <h2>Update section condition</h2>
+      <form id="conditionForm" style="padding:0">
+        <div class="field"><label for="condition">Current condition</label>
+          <select id="condition" required><option value="Normal">Normal – no issue</option><option value="Warning">Warning – issue observed</option><option value="Emergency">Emergency – immediate assistance needed</option></select>
+        </div>
+        <div class="field"><label for="conditionDetails">Details / location</label><textarea id="conditionDetails" placeholder="Describe what happened, where it happened, and any assistance required."></textarea></div>
+        <button class="primary" type="submit">Submit condition update</button>
+      </form>
+      <div id="emergencyBanner" class="alert hidden"><strong>Emergency status recorded.</strong> Follow your event's emergency procedure and contact the designated supervisor or local emergency services directly. This prototype does not send an alert.</div>
+    </div>
+    <div class="panel section">
+      <h2>Report an incident or injury</h2>
+      <form id="incidentForm" style="padding:0">
+        <div class="field"><label for="incidentType">Incident type</label>
+          <select id="incidentType" required><option value="">Choose incident type</option><option>Injury</option><option>Accident</option><option>Missing person</option><option>Equipment / facility issue</option><option>Safety hazard</option><option>Other</option></select>
+        </div>
+        <div class="field"><label for="incidentLocation">Location</label><input id="incidentLocation" required placeholder="e.g. Activity Area, entrance"></div>
+        <div class="field"><label for="incidentDetails">Description</label><textarea id="incidentDetails" required placeholder="Describe the incident and assistance needed"></textarea></div>
+        <button class="danger" type="submit">Record incident</button>
+      </form>
+    </div>
+  </div>
+  <div class="panel section" style="margin-top:18px">
+    <div class="topline" style="margin-bottom:14px"><div><h2 style="margin:0">Activity & notification log</h2><div class="sub">Updates recorded in this browser session</div></div><button class="secondary" id="clearBtn">Clear demo log</button></div>
+    <div id="activityLog"><div class="small">No updates recorded yet.</div></div>
+  </div>
+</section>
+</main>
+<footer>VolunteerSafe • Academic project mock-up • Not for real emergency dispatch</footer>
+<script>
+const $ = id => document.getElementById(id);
+let volunteer = null;
+let currentCondition = "Normal";
+const logItems = [];
+function timeNow(){return new Date().toLocaleString();}
+function addLog(title, detail, level="ok"){
+  logItems.unshift({title,detail,level,time:timeNow()});
+  renderLog();
+}
+function renderLog(){
+  const root=$("activityLog");
+  if(!logItems.length){root.innerHTML='<div class="small">No updates recorded yet.</div>';return;}
+  root.innerHTML=logItems.map(item=>`<div class="report"><div class="report-top"><strong>${escapeHTML(item.title)}</strong><span class="status ${item.level}">${escapeHTML(item.time)}</span></div><p>${escapeHTML(item.detail)}</p></div>`).join("");
+}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+$("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  volunteer={name:$("volName").value.trim(),matrix:$("matrix").value.trim(),workstation:$("workstation").value,position:$("position").value};
+  $("welcomeText").textContent=`Welcome, ${volunteer.name} • ID: ${volunteer.matrix}`;
+  $("workstationValue").textContent=volunteer.workstation;
+  $("positionValue").textContent=volunteer.position;
+  $("loginView").classList.add("hidden");$("dashboardView").classList.remove("hidden");
+  addLog("Volunteer logged in",`${volunteer.name} signed in at ${volunteer.workstation} – ${volunteer.position}.`);
+});
+$("conditionForm").addEventListener("submit",e=>{
+  e.preventDefault();currentCondition=$("condition").value;
+  $("conditionValue").textContent=currentCondition;
+  $("conditionValue").style.color=currentCondition==="Emergency"?"var(--red)":currentCondition==="Warning"?"var(--amber)":"var(--green)";
+  const details=$("conditionDetails").value.trim()||"No additional details provided.";
+  const emergency=currentCondition==="Emergency";
+  $("emergencyBanner").classList.toggle("hidden",!emergency);
+  addLog(`Section condition: ${currentCondition}`,`${volunteer.position} • ${details}`,emergency?"critical":currentCondition==="Warning"?"warn":"ok");
+  $("conditionDetails").value="";
+});
+$("incidentForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const type=$("incidentType").value,location=$("incidentLocation").value.trim(),details=$("incidentDetails").value.trim();
+  addLog(`Incident reported: ${type}`,`Location: ${location}. ${details}`,"critical");
+  $("incidentForm").reset();
+  alert("Incident recorded in this demo. Please inform your supervisor directly. No external notification was sent.");
+});
+$("logoutBtn").addEventListener("click",()=>{
+  volunteer=null;$("dashboardView").classList.add("hidden");$("loginView").classList.remove("hidden");
+  $("loginForm").reset();$("conditionForm").reset();$("incidentForm").reset();
+  $("conditionValue").textContent="Normal";$("conditionValue").style.color="";$("emergencyBanner").classList.add("hidden");
+});
+$("clearBtn").addEventListener("click",()=>{logItems.length=0;renderLog();});
+</script>
+</body>
+</html>
