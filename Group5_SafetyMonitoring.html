@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14243a">
+<title>Safety Command Centre | Group 5</title>
+<style>
+:root{
+ --navy:#14243a;--navy2:#203955;--blue:#2563eb;--sky:#eaf2ff;
+ --bg:#f3f6fb;--surface:#fff;--text:#182230;--muted:#68778b;
+ --line:#e3e9f1;--green:#16845b;--greenbg:#e4f6ed;
+ --amber:#a66b08;--amberbg:#fff4d9;--red:#c93636;--redbg:#ffe8e8;
+ --shadow:0 8px 28px rgba(27,53,80,.07)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+header{background:linear-gradient(110deg,var(--navy),var(--navy2));color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{font-size:21px;font-weight:850;letter-spacing:.2px}.brand span{color:#7dd3fc}
+.tagline{font-size:12px;color:#c8d5e5;margin-top:3px}
+.header-right{font-size:12px;color:#d9e5f2;text-align:right}
+main{max-width:1180px;margin:28px auto;padding:0 18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.auth-wrap{max-width:600px;margin:38px auto}
+.auth-head{padding:26px 28px 8px}.auth-head h1{margin:0 0 8px;font-size:26px}.auth-head p{color:var(--muted);margin:0;line-height:1.5}
+.tabs{display:flex;gap:8px;padding:0 28px 12px}
+.tab{flex:1;background:#eef2f7;color:#40516a}.tab.active{background:var(--navy);color:#fff}
+form{padding:18px 28px 28px}
+.field{margin-bottom:15px}.field label{display:block;font-size:13px;font-weight:750;margin-bottom:7px}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid #cfd8e5;border-radius:9px;font:inherit;color:var(--text);background:#fff}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:3px solid #bfdbfe;border-color:var(--blue)}
+button{border:0;border-radius:9px;padding:11px 15px;font:inherit;font-weight:750;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.primary{background:var(--blue);color:#fff}.primary:hover{background:#1d4ed8}
+.secondary{background:#eaf0f8;color:var(--navy)}.danger{background:var(--red);color:#fff}
+.full{width:100%}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
+.notice{padding:12px 14px;border-radius:10px;background:var(--amberbg);color:#80540b;font-size:13px;line-height:1.5;margin-bottom:17px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.topline h1{font-size:25px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:5px}
+.user-pill{background:#eaf0f8;border-radius:30px;padding:8px 12px;font-size:12px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:17px}
+.stat{padding:16px}.stat-label{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.5px}.stat-number{font-size:27px;font-weight:850;margin-top:5px}
+.section-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.zone{padding:15px;min-width:0}.zone-head{display:flex;justify-content:space-between;align-items:flex-start;gap:7px}
+.zone h3{font-size:14px;margin:0 0 9px}.zone .zone-meta{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}
+.status{display:inline-flex;align-items:center;gap:5px;border-radius:30px;padding:5px 8px;font-size:10px;font-weight:850;white-space:nowrap}
+.normal{background:var(--greenbg);color:var(--green)}.warning{background:var(--amberbg);color:var(--amber)}.emergency{background:var(--redbg);color:var(--red)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin-bottom:18px}
+.section-panel{padding:20px}.section-panel h2{font-size:17px;margin:0 0 15px}
+.inline-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.feed-item{border:1px solid var(--line);border-radius:11px;padding:12px;margin-bottom:9px}
+.feed-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.feed-item p{font-size:12px;color:var(--muted);line-height:1.5;margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.empty{padding:18px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:10px}
+.alert-strip{background:var(--redbg);border:1px solid #ffd0d0;color:#982828;padding:13px 15px;border-radius:11px;margin-bottom:16px;font-size:13px;line-height:1.5}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+footer{text-align:center;color:#8a96a6;font-size:11px;padding:28px 12px}
+@media(max-width:900px){.section-grid{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.two-col{grid-template-columns:1fr}.section-grid{grid-template-columns:repeat(2,1fr)}header{padding:14px 18px}.header-right{display:none}.auth-head,form{padding-left:20px;padding-right:20px}.tabs{padding-left:20px;padding-right:20px}}
+@media(max-width:390px){.section-grid{grid-template-columns:1fr}.topline h1{font-size:21px}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">Safety<span>Command</span></div>
+    <div class="tagline">Group 5 · Command Centre & Safety Monitoring</div>
+  </div>
+  <div class="header-right">OPERATING SYSTEM POPBL<br>Multithreading & Inter-Process Communication</div>
+</header>
+
+<main>
+<section id="authView" class="auth-wrap panel">
+  <div class="auth-head">
+    <h1>Volunteer Access</h1>
+    <p>Create a volunteer account or sign in to monitor your assigned event section and report safety incidents.</p>
+  </div>
+  <div class="tabs">
+    <button type="button" class="tab active" id="loginTab">Log in</button>
+    <button type="button" class="tab" id="signupTab">Sign up</button>
+  </div>
+  <form id="loginForm">
+    <div class="field"><label for="loginMatrix">Matric number / ID</label><input id="loginMatrix" autocomplete="username" required placeholder="Enter your matric number"></div>
+    <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password"></div>
+    <button class="primary full" type="submit">Log in to command centre</button>
+    <p class="small">Log in using the matric number you registered with and your password. First time here? Select Sign up.</p>
+  </form>
+  <form id="signupForm" class="hidden">
+    <div class="field"><label for="signupName">Volunteer full name</label><input id="signupName" required autocomplete="name" placeholder="Enter your full name"></div>
+    <div class="field"><label for="signupMatrix">Matric number / ID</label><input id="signupMatrix" required placeholder="e.g. CN250221"></div>
+    <div class="field"><label for="signupEmail">Email address</label><input id="signupEmail" type="email" required autocomplete="email" placeholder="name@example.com"></div>
+    <div class="field"><label for="signupPassword">Create password</label><input id="signupPassword" type="password" minlength="6" required autocomplete="new-password" placeholder="At least 6 characters"></div>
+    <div class="field"><label for="signupSection">Assigned event section</label>
+      <select id="signupSection" required>
+        <option value="">Choose one of the five sections</option>
+        <option value="1">Section 1</option><option value="2">Section 2</option>
+        <option value="3">Section 3</option><option value="4">Section 4</option>
+        <option value="5">Section 5</option>
+      </select>
+    </div>
+    <button class="primary full" type="submit">Create volunteer account</button>
+    <p class="small">Demo prototype: account details are saved in this browser only. This is not secure production authentication and does not sync to other devices.</p>
+  </form>
+</section>
+
+<section id="appView" class="hidden">
+  <div class="topline">
+    <div>
+      <h1>Five-Section Command Centre</h1>
+      <div class="sub" id="welcomeText">Welcome</div>
+    </div>
+    <div class="toolbar">
+      <span class="user-pill" id="userSectionPill">Assigned section</span>
+      <button class="secondary" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+
+  <div class="notice"><strong>Prototype notice:</strong> This version demonstrates the interface using this browser's local storage. It does not provide secure authentication, cross-device live updates, or actual SMS/email emergency delivery. For real multi-volunteer use, connect Firebase or another backend.</div>
+  <div id="urgentBanner" class="alert-strip hidden"><strong>Emergency recorded:</strong> One or more sections have an emergency status. Follow the event emergency procedure and contact the event supervisor / emergency services directly.</div>
+
+  <div class="stats">
+    <div class="panel stat"><div class="stat-label">TOTAL SECTIONS</div><div class="stat-number">5</div></div>
+    <div class="panel stat"><div class="stat-label">NORMAL</div><div class="stat-number" id="normalCount">5</div></div>
+    <div class="panel stat"><div class="stat-label">WARNINGS</div><div class="stat-number" id="warningCount">0</div></div>
+    <div class="panel stat"><div class="stat-label">EMERGENCIES</div><div class="stat-number" id="emergencyCount">0</div></div>
+  </div>
+
+  <div class="topline" style="margin-bottom:12px">
+    <div><h2 style="margin:0;font-size:18px">Section monitoring overview</h2><div class="sub">Status board for all five event sections</div></div>
+    <span class="small" id="lastUpdated">Waiting for updates</span>
+  </div>
+  <div class="section-grid" id="sectionGrid"></div>
+
+  <div class="two-col">
+    <div class="panel section-panel">
+      <h2>Update my section condition</h2>
+      <form id="conditionForm" style="padding:0">
+        <div class="field"><label for="conditionValue">Condition</label>
+          <select id="conditionValue" required><option value="Normal">Normal – no issue</option><option value="Warning">Warning – attention required</option><option value="Emergency">Emergency – immediate assistance needed</option></select>
+        </div>
+        <div class="field"><label for="conditionDetails">Situation / details</label><textarea id="conditionDetails" placeholder="Describe the current situation, exact location and assistance needed."></textarea></div>
+        <button class="primary" type="submit">Submit section update</button>
+      </form>
+      <p class="small">You can update only the section assigned to your account.</p>
+    </div>
+
+    <div class="panel section-panel">
+      <h2>Emergency & injury reporting</h2>
+      <form id="incidentForm" style="padding:0">
+        <div class="field"><label for="incidentType">Incident type</label>
+          <select id="incidentType" required><option value="">Select incident type</option><option>Injury / medical assistance</option><option>Accident</option><option>Safety hazard</option><option>Missing person</option><option>Crowd / security issue</option><option>Equipment / facility issue</option><option>Other</option></select>
+        </div>
+        <div class="field"><label for="incidentLocation">Exact location</label><input id="incidentLocation" required placeholder="e.g. Section 2, water station"></div>
+        <div class="field"><label for="incidentPriority">Priority</label><select id="incidentPriority" required><option value="Warning">Warning – assistance required</option><option value="Emergency">Emergency – urgent response</option></select></div>
+        <div class="field"><label for="incidentDetails">Description</label><textarea id="incidentDetails" required placeholder="What happened? Is anyone injured? What help is required?"></textarea></div>
+        <button class="danger" type="submit">Submit incident report</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel section-panel">
+      <div class="topline" style="margin-bottom:12px"><div><h2 style="margin:0">Notifications</h2><div class="sub">Latest section updates and alerts</div></div><button class="secondary" id="clearNotifications">Clear view</button></div>
+      <div id="notificationList"></div>
+    </div>
+    <div class="panel section-panel">
+      <div class="topline" style="margin-bottom:12px"><div><h2 style="margin:0">Incident records</h2><div class="sub">Submitted reports from this browser</div></div><span class="user-pill" id="incidentTotal">0 reports</span></div>
+      <div id="incidentList"></div>
+    </div>
+  </div>
+  <div class="small">Volunteer: <strong id="profileName"></strong> · Matric: <strong id="profileMatrix"></strong> · Email: <strong id="profileEmail"></strong></div>
+</section>
+</main>
+<footer>Group 5 · Safety Monitoring System · Academic demonstration prototype</footer>
+
+<script>
+const SECTION_IDS = ["1","2","3","4","5"];
+const STORAGE_KEY = "group5_safety_monitoring_demo_v1";
+const USERS_KEY = "group5_safety_users_demo_v1";
+let currentUser = null;
+let notificationsVisible = true;
+
+const $ = id => document.getElementById(id);
+const nowText = () => new Date().toLocaleString();
+function readState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if(saved && saved.sections) return saved;
+  }catch(e){}
+  return {sections:{
+    "1":{status:"Normal",details:"No issue reported.",volunteer:"",updatedAt:""},
+    "2":{status:"Normal",details:"No issue reported.",volunteer:"",updatedAt:""},
+    "3":{status:"Normal",details:"No issue reported.",volunteer:"",updatedAt:""},
+    "4":{status:"Normal",details:"No issue reported.",volunteer:"",updatedAt:""},
+    "5":{status:"Normal",details:"No issue reported.",volunteer:"",updatedAt:""}
+  },notifications:[],incidents:[]};
+}
+function saveState(state){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function readUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY)||"[]")}catch(e){return []}}
+function saveUsers(users){localStorage.setItem(USERS_KEY,JSON.stringify(users))}
+function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function sectionName(id){return "Section "+id}
+function statusClass(status){return status==="Emergency"?"emergency":status==="Warning"?"warning":"normal"}
+function addNotification(state,title,message,level="normal"){
+  state.notifications.unshift({id:Date.now()+Math.random(),title,message,level,time:nowText()});
+  state.notifications=state.notifications.slice(0,60);
+}
+function showLogin(){
+  $("authView").classList.remove("hidden");$("appView").classList.add("hidden");
+}
+function showApp(){
+  $("authView").classList.add("hidden");$("appView").classList.remove("hidden");
+  $("welcomeText").textContent=`Welcome, ${currentUser.name} · ${currentUser.email}`;
+  $("userSectionPill").textContent="Assigned: "+sectionName(currentUser.section);
+  $("profileName").textContent=currentUser.name;
+  $("profileMatrix").textContent=currentUser.matrix;
+  $("profileEmail").textContent=currentUser.email;
+  renderAll();
+}
+function switchAuth(mode){
+  const login=mode==="login";
+  $("loginForm").classList.toggle("hidden",!login);
+  $("signupForm").classList.toggle("hidden",login);
+  $("loginTab").classList.toggle("active",login);
+  $("signupTab").classList.toggle("active",!login);
+}
+$("loginTab").addEventListener("click",()=>switchAuth("login"));
+$("signupTab").addEventListener("click",()=>switchAuth("signup"));
+
+$("signupForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("signupName").value.trim(),matrix=$("signupMatrix").value.trim();
+  const email=$("signupEmail").value.trim().toLowerCase(),password=$("signupPassword").value;
+  const section=$("signupSection").value;
+  const users=readUsers();
+  if(users.some(u=>u.email===email)){alert("This email is already registered. Please log in.");return}
+  if(users.some(u=>u.matrix.toLowerCase()===matrix.toLowerCase())){alert("This matric number is already registered.");return}
+  const user={name,matrix,email,password,section};
+  users.push(user);saveUsers(users);
+  currentUser={name,matrix,email,section};
+  const state=readState();
+  addNotification(state,"Volunteer registered",`${name} joined ${sectionName(section)}.`, "normal");
+  saveState(state);
+  $("signupForm").reset();showApp();
+});
+$("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const matrix=$("loginMatrix").value.trim().toLowerCase(),password=$("loginPassword").value;
+  const user=readUsers().find(u=>u.matrix.toLowerCase()===matrix && u.password===password);
+  if(!user){alert("Matric number or password is incorrect. If you are new, please sign up first.");return}
+  currentUser={name:user.name,matrix:user.matrix,email:user.email,section:user.section};
+  $("loginForm").reset();showApp();
+});
+$("logoutBtn").addEventListener("click",()=>{currentUser=null;showLogin();switchAuth("login")});
+
+function renderAll(){
+  const state=readState();
+  const counts={Normal:0,Warning:0,Emergency:0};
+  $("sectionGrid").innerHTML=SECTION_IDS.map(id=>{
+    const s=state.sections[id]||{status:"Normal",details:"No issue reported.",volunteer:"",updatedAt:""};
+    counts[s.status]=(counts[s.status]||0)+1;
+    return `<article class="panel zone">
+      <div class="zone-head"><h3>${sectionName(id)}</h3><span class="status ${statusClass(s.status)}">${escapeHTML(s.status)}</span></div>
+      <div class="zone-meta"><strong>Last volunteer:</strong> ${escapeHTML(s.volunteer||"No update")}<br>
+      <strong>Updated:</strong> ${escapeHTML(s.updatedAt||"Not yet")}<br>
+      <strong>Details:</strong> ${escapeHTML(s.details||"No details")}</div>
+    </article>`;
+  }).join("");
+  $("normalCount").textContent=counts.Normal||0;
+  $("warningCount").textContent=counts.Warning||0;
+  $("emergencyCount").textContent=counts.Emergency||0;
+  $("urgentBanner").classList.toggle("hidden",(counts.Emergency||0)===0);
+  $("lastUpdated").textContent="Updated: "+nowText();
+  renderNotifications(state);renderIncidents(state);
+}
+function renderNotifications(state){
+  const list=$("notificationList");
+  if(!notificationsVisible){list.innerHTML='<div class="empty">Notification view cleared. New updates will appear here.</div>';return}
+  if(!state.notifications.length){list.innerHTML='<div class="empty">No notifications yet.</div>';return}
+  list.innerHTML=state.notifications.slice(0,12).map(n=>`<div class="feed-item">
+    <div class="feed-top"><strong>${escapeHTML(n.title)}</strong><span class="status ${n.level==="emergency"?"emergency":n.level==="warning"?"warning":"normal"}">${escapeHTML(n.level)}</span></div>
+    <p>${escapeHTML(n.message)}<br>${escapeHTML(n.time)}</p></div>`).join("");
+}
+function renderIncidents(state){
+  $("incidentTotal").textContent=state.incidents.length+" reports";
+  const list=$("incidentList");
+  if(!state.incidents.length){list.innerHTML='<div class="empty">No incident reports yet.</div>';return}
+  list.innerHTML=state.incidents.slice(0,12).map(i=>`<div class="feed-item">
+    <div class="feed-top"><strong>${escapeHTML(i.type)}</strong><span class="status ${i.priority==="Emergency"?"emergency":"warning"}">${escapeHTML(i.priority)}</span></div>
+    <p><strong>${escapeHTML(sectionName(i.section))}</strong> · ${escapeHTML(i.location)}<br>${escapeHTML(i.details)}<br>Reported by ${escapeHTML(i.name)} (${escapeHTML(i.matrix)}) · ${escapeHTML(i.time)}</p>
+  </div>`).join("");
+}
+$("conditionForm").addEventListener("submit",e=>{
+  e.preventDefault();if(!currentUser)return;
+  const status=$("conditionValue").value,details=$("conditionDetails").value.trim()||"No additional details provided.";
+  const state=readState();
+  state.sections[currentUser.section]={status,details,volunteer:currentUser.name,updatedAt:nowText()};
+  addNotification(state,`${sectionName(currentUser.section)} status: ${status}`,`${currentUser.name}: ${details}`,status==="Emergency"?"emergency":status==="Warning"?"warning":"normal");
+  saveState(state);$("conditionForm").reset();renderAll();
+  if(status==="Emergency")alert("Emergency status recorded in this demo. Contact your event supervisor and emergency services directly. No external alert has been sent.");
+});
+$("incidentForm").addEventListener("submit",e=>{
+  e.preventDefault();if(!currentUser)return;
+  const type=$("incidentType").value,location=$("incidentLocation").value.trim();
+  const priority=$("incidentPriority").value,details=$("incidentDetails").value.trim();
+  const state=readState();
+  const incident={id:Date.now(),type,location,priority,details,section:currentUser.section,name:currentUser.name,matrix:currentUser.matrix,time:nowText()};
+  state.incidents.unshift(incident);state.incidents=state.incidents.slice(0,100);
+  addNotification(state,`${priority}: ${type}`,`${sectionName(currentUser.section)} · ${location} · Reported by ${currentUser.name}`,priority==="Emergency"?"emergency":"warning");
+  if(priority==="Emergency"){
+    state.sections[currentUser.section]={status:"Emergency",details:`${type} at ${location}: ${details}`,volunteer:currentUser.name,updatedAt:nowText()};
+  }else if(state.sections[currentUser.section].status==="Normal"){
+    state.sections[currentUser.section]={status:"Warning",details:`${type} at ${location}: ${details}`,volunteer:currentUser.name,updatedAt:nowText()};
+  }
+  saveState(state);$("incidentForm").reset();renderAll();
+  alert("Incident report saved in this browser demo. Please notify your supervisor directly. No email, SMS or external emergency alert was sent.");
+});
+$("clearNotifications").addEventListener("click",()=>{notificationsVisible=false;renderNotifications(readState())});
+window.addEventListener("storage",e=>{if(e.key===STORAGE_KEY&&currentUser)renderAll()});
+setInterval(()=>{if(currentUser)renderAll()},5000);
+</script>
+</body>
+</html>
